@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -30,6 +30,21 @@ async function run(req, res) {
             res.send(services);
             console.log(services);
         })
+        app.get('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const service = await serviceCollection.findOne(query);
+            console.log(service);
+            res.send(service);
+        });
+        // Please delete only for git
+        app.get('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const service = await serviceCollection.findOne(query);
+            console.log(service);
+            res.send(service);
+        });
 
     }
     finally { }
