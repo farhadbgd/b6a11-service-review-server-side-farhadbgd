@@ -23,34 +23,50 @@ async function run(req, res) {
         const uri = "mongodb+srv://assignment11:NGk2G0veZGmhftdZ@cluster0.kliinjg.mongodb.net/?retryWrites=true&w=majority";
         const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
         const serviceCollection = client.db('HappySmile').collection('services');
+        const serviceReview = client.db('HappySmile').collection('reviews');
+
         app.get('/services', async (req, res) => {
             const query = {};
             const cursor = serviceCollection.find(query);
             const services = await cursor.toArray();
             res.send(services);
-            console.log(services);
+        })
+        app.get('/reviews', async (req, res) => {
+            const query = {};
+            const cursor = serviceReview.find(query);
+            const reviews = await cursor.toArray();
+            res.send(reviews);
         })
         app.get('/service', async (req, res) => {
             const query = {};
             const cursor = serviceCollection.find(query);
             const services = await cursor.limit(3).toArray();
             res.send(services);
-            console.log(services);
         })
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const service = await serviceCollection.findOne(query);
-            console.log(service);
             res.send(service);
+
         })
+
         app.post('/services', async (req, res) => {
             const user = req.body;
-            console.log(user)
             const result = await serviceCollection.insertOne(user);
-
             res.send(result);
-            console.log(user);
+        })
+        app.get('/addreview/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const service = await serviceCollection.findOne(query);
+            res.send(service);
+
+        })
+        app.post('/reviews', async (req, res) => {
+            const user = req.body;
+            const result = await serviceReview.insertOne(user);
+            res.send(result);
         })
 
     }
